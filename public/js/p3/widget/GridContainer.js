@@ -106,6 +106,7 @@ define([
     hashParams: null,
     design: 'headline',
     facetFields: [],
+    advancedSearchFields: [],
     enableFilterPanel: true,
     defaultFilter: '',
     store: null,
@@ -365,7 +366,7 @@ define([
           tooltip: 'Download Selection',
           max: 10000,
           tooltipDialog: downloadSelectionTT,
-          validContainerTypes: ['genome_data', 'sequence_data', 'feature_data', 'spgene_data', 'spgene_ref_data', 'transcriptomics_experiment_data', 'transcriptomics_sample_data', 'pathway_data', 'transcriptomics_gene_data', 'gene_expression_data', 'interaction_data', 'genome_amr_data']
+          validContainerTypes: ['genome_data', 'sequence_data', 'feature_data', 'spgene_data', 'spgene_ref_data', 'transcriptomics_experiment_data', 'transcriptomics_sample_data', 'pathway_data', 'transcriptomics_gene_data', 'gene_expression_data', 'interaction_data', 'genome_amr_data', 'structure_data', 'proteinFeatures_data', 'surveillance_data', 'serology_data']
         },
         function (selection, container) {
 
@@ -398,7 +399,7 @@ define([
           tooltip: 'Copy Selection to Clipboard.',
           tooltipDialog: copySelectionTT,
           max: 5000,
-          validContainerTypes: ['genome_data', 'sequence_data', 'feature_data', 'spgene_data', 'spgene_ref_data', 'transcriptomics_experiment_data', 'transcriptomics_sample_data', 'pathway_data', 'transcriptomics_gene_data', 'gene_expression_data', 'interaction_data', 'genome_amr_data', 'pathway_summary_data', 'subsystem_data']
+          validContainerTypes: ['genome_data', 'sequence_data', 'feature_data', 'spgene_data', 'spgene_ref_data', 'transcriptomics_experiment_data', 'transcriptomics_sample_data', 'pathway_data', 'transcriptomics_gene_data', 'gene_expression_data', 'interaction_data', 'genome_amr_data', 'pathway_summary_data', 'subsystem_data', 'structure_data', 'proteinFeatures_data', 'surveillance_data', 'serology_data']
         },
         function (selection, container) {
           this.selectionActionBar._actions.CopySelection.options.tooltipDialog.set('selection', selection);
@@ -427,7 +428,7 @@ define([
           validTypes: ['*'],
           multiple: false,
           tooltip: 'Switch to Feature View. Press and Hold for more options.',
-          validContainerTypes: ['feature_data', 'transcriptomics_gene_data'],
+          validContainerTypes: ['feature_data', 'transcriptomics_gene_data', 'structure_data', 'proteinFeatures_data'],
           pressAndHold: function (selection, button, opts, evt) {
             console.log('PressAndHold');
             console.log('Selection: ', selection, selection[0]);
@@ -576,7 +577,7 @@ define([
           multiple: false,
           tooltip: 'Switch to Genome View. Press and Hold for more options.',
           ignoreDataType: true,
-          validContainerTypes: ['sequence_data', 'feature_data', 'spgene_data', 'sequence_data'],
+          validContainerTypes: ['sequence_data', 'feature_data', 'spgene_data', 'sequence_data', 'structure_data', 'proteinFeatures_data'],
           pressAndHold: function (selection, button, opts, evt) {
             console.log('PressAndHold');
             console.log('Selection: ', selection, selection[0]);
@@ -593,6 +594,94 @@ define([
           // console.log("sel: ", sel)
           // console.log("Nav to: ", "/view/Genome/" + sel.genome_id);
           Topic.publish('/navigate', { href: '/view/Genome/' + sel.genome_id });
+        },
+        false
+      ], [
+        'ViewStructureItem',
+        'MultiButton fa icon-selection-Sequence fa-2x',
+        {
+          label: 'STRUCTURE',
+          validTypes: ['*'],
+          multiple: false,
+          tooltip: 'Switch to Structure View. Press and Hold for more options.',
+          ignoreDataType: true,
+          validContainerTypes: ['structure_data'],
+          pressAndHold: function (selection, button, opts, evt) {
+            console.log('PressAndHold');
+            console.log('Selection: ', selection, selection[0]);
+            popup.open({
+              popup: new PerspectiveToolTipDialog({ perspectiveUrl: '/view/Structure/' + selection[0].pdb_id }),
+              around: button,
+              orient: ['below'],
+            });
+
+          }
+        },
+        function (selection) {
+          var sel = selection[0];
+          // console.log("sel: ", sel)
+          // console.log("Nav to: ", "/view/Genome/" + sel.genome_id);
+          Topic.publish('/navigate', { href: '/view/Structure/' + sel.pdb_id, target: 'blank' });
+        },
+        false
+      ],
+
+      [
+        'ViewSurveillanceItem',
+        'MultiButton fa icon-selection-Sequence fa-2x',
+        {
+          label: 'SURVEILLANCE',
+          validTypes: ['*'],
+          multiple: false,
+          tooltip: 'Switch to Surveillance View. Press and Hold for more options.',
+          ignoreDataType: true,
+          validContainerTypes: ['surveillance_data'],
+          pressAndHold: function (selection, button, opts, evt) {
+            console.log('PressAndHold');
+            console.log('Selection: ', selection, selection[0]);
+            popup.open({
+              popup: new PerspectiveToolTipDialog({ perspectiveUrl: '/view/Surveillance/' + selection[0].sample_identifier }),
+              around: button,
+              orient: ['below'],
+            });
+
+          }
+        },
+        function (selection) {
+          var sel = selection[0];
+          // console.log("sel: ", sel)
+          // console.log("Nav to: ", "/view/Genome/" + sel.genome_id);
+          Topic.publish('/navigate', { href: '/view/Surveillance/' + sel.sample_identifier, target: 'blank' });
+        },
+        false
+      ],
+
+      [
+        'ViewSerologyItem',
+        'MultiButton fa icon-selection-Sequence fa-2x',
+        {
+          label: 'SEROLOGY',
+          validTypes: ['*'],
+          multiple: false,
+          tooltip: 'Switch to Serology View. Press and Hold for more options.',
+          ignoreDataType: true,
+          validContainerTypes: ['serology_data'],
+          pressAndHold: function (selection, button, opts, evt) {
+            console.log('PressAndHold');
+            console.log('Selection: ', selection, selection[0]);
+            popup.open({
+              popup: new PerspectiveToolTipDialog({ perspectiveUrl: '/view/Serology/' + selection[0].sample_identifier }),
+              around: button,
+              orient: ['below'],
+            });
+
+          }
+        },
+        function (selection) {
+          var sel = selection[0];
+          // console.log("sel: ", sel)
+          // console.log("Nav to: ", "/view/Genome/" + sel.genome_id);
+          Topic.publish('/navigate', { href: '/view/Serology/' + sel.sample_identifier, target: 'blank' });
         },
         false
       ],
@@ -680,7 +769,7 @@ define([
           max: 5000,
           tooltip: 'View FASTA Data',
           tooltipDialog: viewFASTATT,
-          validContainerTypes: ['feature_data', 'spgene_data', 'transcriptomics_gene_data', 'pathway_data']
+          validContainerTypes: ['feature_data', 'spgene_data', 'transcriptomics_gene_data', 'pathway_data', 'sequence_data']
         },
         function (selection, containerWidget) {
           switch (containerWidget.containerType) {
@@ -1461,6 +1550,7 @@ define([
         className: 'BrowserHeader',
         dataModel: this.dataModel,
         facetFields: this.facetFields,
+        advancedSearchFields: this.advancedSearchFields,
         state: lang.mixin({}, this.state),
         enableAnchorButton: this.enableAnchorButton,
         currentContainerWidget: this

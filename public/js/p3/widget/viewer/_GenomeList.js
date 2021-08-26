@@ -2,21 +2,21 @@ define([
   'dojo/_base/declare', './TabViewerBase', 'dojo/on', 'dojo/_base/lang', 'dojo/request',
   'dojo/dom-class', 'dijit/layout/ContentPane', 'dojo/dom-construct', 'dojo/topic',
   '../GenomeOverview',
-  '../FeatureGridContainer', '../SpecialtyGeneGridContainer',
+  '../FeatureGridContainer', '../ProteinStructureGridContainer', '../SpecialtyGeneGridContainer', '../ProteinFeaturesGridContainer',
   '../ActionBar', '../ContainerActionBar', '../PathwaysContainer', '../ProteinFamiliesContainer',
   '../DiseaseContainer', '../PublicationGridContainer', '../CircularViewerContainer',
   '../TranscriptomicsContainer', '../InteractionContainer', '../GenomeGridContainer',
-  '../AMRPanelGridContainer', '../SubSystemsContainer',
+  '../AMRPanelGridContainer', '../SubSystemsContainer', '../SurveillanceGridContainer', '../SerologyGridContainer',
   '../SequenceGridContainer', '../../util/PathJoin', '../../util/QueryToEnglish', 'dijit/Dialog'
 ], function (
   declare, TabViewerBase, on, lang, xhr,
   domClass, ContentPane, domConstruct, Topic,
   GenomeOverview,
-  FeatureGridContainer, SpecialtyGeneGridContainer,
+  FeatureGridContainer, ProteinStructureGridContainer, SpecialtyGeneGridContainer, ProteinFeaturesGridContainer,
   ActionBar, ContainerActionBar, PathwaysContainer, ProteinFamiliesContainer,
   DiseaseContainer, PublicationGridContainer, CircularViewerContainer,
   TranscriptomicsContainer, InteractionsContainer, GenomeGridContainer,
-  AMRPanelGridContainer, SubSystemsContainer,
+  AMRPanelGridContainer, SubSystemsContainer, SurveillanceGridContainer, SerologyGridContainer,
   SequenceGridContainer, PathJoin, QueryToEnglish, Dialog
 ) {
   return declare([TabViewerBase], {
@@ -334,11 +334,21 @@ define([
         id: this.viewer.id + '_features',
         disabled: false
       });
+      this.structures = new ProteinStructureGridContainer({
+        title: 'Protein Structures',
+        id: this.viewer.id + '_structures',
+        disabled: false
+      });
       this.specialtyGenes = new SpecialtyGeneGridContainer({
         title: 'Specialty Genes',
         id: this.viewer.id + '_specialtyGenes',
         disabled: false,
         state: this.state
+      });
+      this.proteinFeatures = new ProteinFeaturesGridContainer({
+        title: 'Protein Features',
+        id: this.viewer.id + '_proteinFeatures',
+        disabled: false
       });
       this.pathways = new PathwaysContainer({
         title: 'Pathways',
@@ -368,17 +378,33 @@ define([
         state: this.state
       });
 
+      this.surveillance = new SurveillanceGridContainer({
+        title: 'Surveillance',
+        id: this.viewer.id + '_surveillance',
+        state: this.state
+      });
+
+      this.serology = new SerologyGridContainer({
+        title: 'Serology',
+        id: this.viewer.id + '_serology',
+        state: this.state
+      });
+
       this.viewer.addChild(this.overview);
       this.viewer.addChild(this.genomes);
       this.viewer.addChild(this.amr);
       this.viewer.addChild(this.sequences);
       this.viewer.addChild(this.features);
+      this.viewer.addChild(this.structures);
       this.viewer.addChild(this.specialtyGenes);
+      this.viewer.addChild(this.proteinFeatures);
       this.viewer.addChild(this.proteinFamilies);
       this.viewer.addChild(this.pathways);
       this.viewer.addChild(this.subsystems);
       this.viewer.addChild(this.transcriptomics);
       this.viewer.addChild(this.interactions);
+      // this.viewer.addChild(this.surveillance);
+      // this.viewer.addChild(this.serology);
 
       if (localStorage) {
         var gs = localStorage.getItem(this.showQuickstartKey);

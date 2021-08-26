@@ -124,6 +124,7 @@ app.use('/register', contentViewer);
 app.use('/remote', remotePage);
 app.use('/view', viewers);
 app.use('/search', search);
+app.use('/searches', search);
 app.use('/app', apps);
 app.use('/job', jobs);
 app.use('/status', systemStatus);  // system status page
