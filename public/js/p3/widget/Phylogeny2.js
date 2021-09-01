@@ -135,7 +135,7 @@ define([
 
     onSetState: function (attr, oldVal, state) {
       // this.treeDiv.innerHTML= "Loading...";
-      console.log('Phylogeny onSetState: ', state);
+      // console.log('Phylogeny onSetState: ', state);
       if (!state) {
         return;
       }
@@ -331,14 +331,10 @@ define([
     setupActions: function () {
       if (this.containerActionBar && this.containerActions) {
         this.containerActions.forEach(function (a) {
-          // console.log('setupActions a', a);
-          // console.log('containerActions', this.containerActions)
           this.containerActionBar.addAction(a[0], a[1], a[2], lang.hitch(this, a[3]), a[4], a[5]);
         }, this);
       }
       this.selectionActions.forEach(function (a) {
-        // console.log('selectionActions a', a);
-        // console.log('selectionActions', this.selectionActions)
 
         var cont = false;
         if (this.state && this.state.href.includes('WithGenomeNames.') && a[0] == 'IDSelection') {
